@@ -18,111 +18,10 @@ import {
 
 interface HeaderProps {
     scrollY: number;
+    onSelectCategory: (category: string) => void;
 }
 
-// const header: React.FC<HeaderProps> = ({ scrollY }) => {
-//
-//     const animatedScrollY = useSharedValue(0);
-//     const [menDropdownVisible, setMenDropdownVisible] = useState(false);
-//     const [womenDropdownVisible, setWomenDropdownVisible] = useState(false);
-//
-//
-//
-//
-//     useEffect(() => {
-//         animatedScrollY.value = scrollY;
-//     }, [scrollY]);
-//
-//     // Create animated styles based on scroll position
-//     const animatedStyle = useAnimatedStyle(() => {
-//         const opacity = interpolate(
-//             animatedScrollY.value,
-//             [0, 100],
-//             [1, 0.0],
-//             Extrapolation.CLAMP
-//         );
-//
-//         return {
-//             opacity,
-//         };
-//     });
-//
-//     return (
-//         <Animated.View style={[styles.container, animatedStyle]} testID="header-container">
-//             <Animated.Image
-//                 source={{
-//                     uri: 'https://gateway.pinata.cloud/ipfs/QmTwebymmmakVNnkmSsTVPNu6H5rLBosFLJZbiw2sUYmuS',
-//                 }}
-//                 style={styles.image}
-//                 resizeMode="contain"
-//                 testID="header-image"
-//             />
-//                 <View style={styles.navigacija}>
-//                     <View style={styles.dropdownContainer}>
-//                         <TouchableOpacity
-//                             onPress={() => toggleDropdown('men')}
-//                             style={[
-//                                 styles.dropdownButton,
-//                                 activeDropdown === 'men' && styles.activeButton
-//                             ]}
-//                         >
-//                             <Text style={styles.dropdownButtonText}>Мажи</Text>
-//                         </TouchableOpacity>
-//
-//                         {activeDropdown === 'men' && (
-//                             <Animated.View style={[styles.dropdownContent, { maxHeight: dropdownHeight }]}>
-//                                 <TouchableOpacity style={styles.dropdownItem}>
-//                                     <Text>Кошули</Text>
-//                                 </TouchableOpacity>
-//                                 <TouchableOpacity style={styles.dropdownItem}>
-//                                     <Text>Панталони</Text>
-//                                 </TouchableOpacity>
-//                                 <TouchableOpacity style={styles.dropdownItem}>
-//                                     <Text>Јакни</Text>
-//                                 </TouchableOpacity>
-//                             </Animated.View>
-//                         )}
-//                     </View>
-//
-//                     {/* Women's dropdown */}
-//                     <View style={styles.dropdownContainer}>
-//                         <TouchableOpacity
-//                             onPress={() => toggleDropdown('women')}
-//                             style={[
-//                                 styles.dropdownButton,
-//                                 activeDropdown === 'women' && styles.activeButton
-//                             ]}
-//                         >
-//                             <Text style={styles.dropdownButtonText}>Жени</Text>
-//                         </TouchableOpacity>
-//
-//                         {activeDropdown === 'women' && (
-//                             <Animated.View style={[styles.dropdownContent, { maxHeight: dropdownHeight }]}>
-//                                 <TouchableOpacity style={styles.dropdownItem}>
-//                                     <Text>Фустани</Text>
-//                                 </TouchableOpacity>
-//                                 <TouchableOpacity style={styles.dropdownItem}>
-//                                     <Text>Блузи</Text>
-//                                 </TouchableOpacity>
-//                                 <TouchableOpacity style={styles.dropdownItem}>
-//                                     <Text>Здолништа</Text>
-//                                 </TouchableOpacity>
-//                             </Animated.View>
-//                         )}
-//                     </View>
-//
-//
-//                 </View>
-//         </Animated.View>
-//
-//     );
-// };
-//
-
-//
-// export default header;
-
-const header: React.FC<HeaderProps> = ({ scrollY }) => {
+const header: React.FC<HeaderProps> = ({ scrollY,onSelectCategory  }) => {
     const animatedScrollY = useSharedValue(0);
 
     // Manage which dropdown is open: 'men', 'women', or null
@@ -136,8 +35,7 @@ const header: React.FC<HeaderProps> = ({ scrollY }) => {
         setActiveDropdown(prev => (prev === dropdown ? null : dropdown));
     };
 
-    // You can animate dropdownHeight if needed, or just hardcode it:
-    const dropdownHeight = 150;
+
 
     const animatedStyle = useAnimatedStyle(() => {
         const opacity = interpolate(
@@ -175,15 +73,21 @@ const header: React.FC<HeaderProps> = ({ scrollY }) => {
                     </TouchableOpacity>
 
                     {activeDropdown === 'men' && (
-                        <Animated.View style={[styles.dropdownContent, { maxHeight: dropdownHeight }]}>
-                            <TouchableOpacity style={styles.dropdownItem}>
-                                <Text>Кошули</Text>
+                        <Animated.View style={[styles.dropdownContent]}>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("Kostum")}>
+                                <Text>Костум</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.dropdownItem}>
-                                <Text>Панталони</Text>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("Konduri")}>
+                                <Text>Кондури</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.dropdownItem}>
-                                <Text>Јакни</Text>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("Sako")}>
+                                <Text>Сако</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("Kosula")}>
+                                <Text>Кошула</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("MaskiKaput")}>
+                                <Text>Капут</Text>
                             </TouchableOpacity>
                         </Animated.View>
                     )}
@@ -202,18 +106,27 @@ const header: React.FC<HeaderProps> = ({ scrollY }) => {
                     </TouchableOpacity>
 
                     {activeDropdown === 'women' && (
-                        <Animated.View style={[styles.dropdownContent, { maxHeight: dropdownHeight }]}>
-                            <TouchableOpacity style={styles.dropdownItem}>
+                        <Animated.View style={[styles.dropdownContent]}>
+                            <TouchableOpacity style={styles.dropdownItem}  onPress={() => onSelectCategory("Fustan")}>
                                 <Text>Фустани</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.dropdownItem}>
-                                <Text>Блузи</Text>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("Kruni")}>
+                                <Text>Круни</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.dropdownItem}>
-                                <Text>Здолништа</Text>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("ZenskiKaput")}>
+                                <Text>Капут</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("ZenskiKaput")}>
+                                <Text>Капут</Text>
+                            </TouchableOpacity>
+
                         </Animated.View>
                     )}
+                </View>
+                <View style={styles.dropdownContainer}>
+                    <TouchableOpacity style={styles.dropdownItem} onPress={() => onSelectCategory("Попуст")}>
+                        <Text style={styles.dropdownButtonText}>Попуст</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </Animated.View>
@@ -224,7 +137,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff',
-        paddingVertical: 10,
+        paddingVertical: 0,
         position: 'absolute',
         top: 0,
         left: 0,
@@ -232,7 +145,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
     },
     image: {
-        width: 150,
+        width: 180,
         height: 80,
     },
     navigacija:{
@@ -265,24 +178,22 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     dropdownItem: {
-        padding: 15,
-        borderBottomWidth: 1,
+        padding: 10,
+
         borderBottomColor: '#f0f0f0',
     },
     dropdownContainer: {
-        position: 'relative', // So dropdownContent absolute is relative to this container
+        position: 'relative',
         marginHorizontal: 10,
     },
 
     activeButton: {
-        backgroundColor: '#007AFF', // iOS blue color for active state
         borderRadius: 5,
-        // Optional: add shadow for more emphasis
-        shadowColor: '#007AFF',
-        shadowOffset: { width: 0, height: 2 },
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.5,
         shadowRadius: 4,
-        elevation: 3, // Android shadow
+        elevation: 3,
     },
 });
 export default header;

@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import Animated, {useAnimatedStyle, useSharedValue, withTiming,} from 'react-native-reanimated';
-import { Modal } from 'react-native';
+
 import ZoomableImage from './ZoomableImage';
 import { colors, spacing, globalStyles } from '../../styles/global';
 import Header from './header';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
+
 import {
     View,
     Text,
@@ -38,11 +41,10 @@ interface Roba {
         const [data, setData] = useState<Roba[]>([]);
         const [scrollY, setScrollY] = useState(0);
         const [currentIndexMap, setCurrentIndexMap] = useState<Record<number, number>>({});
-
+        const navigation = useNavigation<any>();
         const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
         const handleCategorySelect = (category: string) => {
             setSelectedCategory(category);
-            console.log(category);
         };
 
         useEffect(() => {
@@ -50,6 +52,22 @@ interface Roba {
                 setData(response.data);
             });
         }, []);
+
+
+        let filteredData: Roba[] = [];
+
+        if (selectedCategory && selectedCategory !== "Попуст") {
+            filteredData = data.filter(item =>
+                item.type.toLowerCase() === selectedCategory.toLowerCase()
+            );
+        } else if (selectedCategory === "Попуст") {
+            filteredData = data.filter(item => item.popust);
+        } else {
+            filteredData = data;
+        }
+
+
+
 
         const handleScroll = (
             event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -75,12 +93,15 @@ interface Roba {
                         showsHorizontalScrollIndicator={false}
                         onScroll={(event) => handleScroll(event, item.id)}
                         renderItem={({item: uri}) => (
-
-                            <ZoomableImage uri={uri}  />
-
+                            <TouchableOpacity 
+                                activeOpacity={0.9}
+                                onPress={() => navigation.navigate('ViewImage', { data: item })}
+                                style={{ width: screenWidth, height: screenWidth * 1.4 }}
+                            >
+                                <ZoomableImage uri={uri} />
+                            </TouchableOpacity>
                         )}
                     />
-
 
                     {/*tockite*/}
                     <View style={styles.dotContainer}>
@@ -104,7 +125,7 @@ interface Roba {
 
                 <FlatList
                     testID="images-flatlist"
-                    data={data}
+                    data={filteredData}
                     keyExtractor={(item) => item.id.toString()}
                     contentContainerStyle={styles.listContent}
                     renderItem={({ item }) => (
@@ -123,10 +144,10 @@ interface Roba {
                         </View>
                     )}
                     onScroll={(event) => {
-                        // Update scrollY state with the current vertical scroll position
+
                         setScrollY(event.nativeEvent.contentOffset.y);
                     }}
-                    // Set to 16 for smooth 60fps scrolling (1000ms / 60fps ≈ 16ms)
+
                     scrollEventThrottle={16}
                 />
             </View>

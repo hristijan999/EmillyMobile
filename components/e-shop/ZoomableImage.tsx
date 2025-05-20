@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dimensions } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -48,11 +49,14 @@ const ZoomableImage = ({ uri }: { uri: string }) => {
 
     return (
         <GestureDetector gesture={pinchGesture}>
+
+
             <Animated.Image
                 source={{ uri }}
                 style={animatedStyle}
-                resizeMode="cover"
+
             />
+
         </GestureDetector>
     );
 };
